@@ -22,12 +22,18 @@ export class ErrorFilter implements ExceptionFilter {
         });
       }
     }
-    // HttpException错误
-    if (exception.name === 'HttpException') {
-      response.status(exception.getStatus()).json({
-        code: exception.getStatus(),
-        message: exception.getResponse(),
-      });
-    }
+    // // HttpException错误
+    // if (exception.name === 'HttpException') {
+    //   response.status(exception.getStatus()).json({
+    //     code: exception.getStatus(),
+    //     message: exception.getResponse(),
+    //   });
+    // }
+    // console.log('其他错误', exception);
+    const errResponse = exception.getResponse();
+    response.status(exception.getStatus()).json({
+      code: exception.getStatus(),
+      ...(errResponse as Record<string, any>),
+    });
   }
 }

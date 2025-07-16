@@ -17,5 +17,6 @@ export class UserDto {
 export interface IUser {
   username?: string;
   password?: string;
+  confirmPassword?: string;
   _confirmPassword?: string;
 }

@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 import { IUser } from './user.dto';
+import { HttpException, HttpStatus } from '@nestjs/common';
+import * as argon2 from 'argon2';
 
 export const userSchema = new mongoose.Schema<IUser>(
   {
@@ -19,6 +21,8 @@ export const userSchema = new mongoose.Schema<IUser>(
       virtuals: true,
       transform: (doc, ret: IUser) => {
         delete ret.password;
+        delete ret.confirmPassword;
+        delete ret['_id'];
         return ret;
       },
     },
@@ -26,6 +30,8 @@ export const userSchema = new mongoose.Schema<IUser>(
       virtuals: true,
       transform: (doc, ret: IUser) => {
         delete ret.password;
+        delete ret.confirmPassword;
+        delete ret['_id'];
         return ret;
       },
     },
@@ -41,5 +47,15 @@ userSchema
     return this._confirmPassword;
   });
 
-userSchema.pre('save', function () {});
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
+
+  if (this.password !== this.confirmPassword) {
+    throw new HttpException('密码不一致', HttpStatus.BAD_REQUEST);
+  }
+  if (this.password) {
+    this.password = await argon2.hash(this.password);
+  }
+  next();
+});
 export const USER_MODEL = 'User';

@@ -1,4 +1,5 @@
 import { IsNotEmpty, MinLength } from 'class-validator';
+import { Match } from 'src/decorator/match.decorator';
 
 export class UserDto {
   @IsNotEmpty({
@@ -9,6 +10,8 @@ export class UserDto {
     message: '密码不能少于6位',
   })
   password: string;
+  @Match('password')
+  confirmPassword: string;
 }
 
 export interface IUser {

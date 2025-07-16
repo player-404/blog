@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 
+// 处理全局的错误
 @Catch()
 export class ErrorFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {

@@ -7,6 +7,8 @@ import { ConfigModule } from '@nestjs/config';
 import { Connection } from 'mongoose';
 import { APP_FILTER } from '@nestjs/core';
 import { ErrorFilter } from './error/error.filter';
+import { AuthController } from './auth/auth.controller';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -21,8 +23,9 @@ import { ErrorFilter } from './error/error.filter';
       },
     }),
     UserModule,
+    AuthModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, AuthController],
   providers: [
     AppService,
     {

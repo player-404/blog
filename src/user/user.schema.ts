@@ -41,4 +41,5 @@ userSchema
     return this._confirmPassword;
   });
 
+userSchema.pre('save', function () {});
 export const USER_MODEL = 'User';

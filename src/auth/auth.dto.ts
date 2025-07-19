@@ -7,3 +7,7 @@ export class UserDto {
   @IsNotEmpty()
   password: string;
 }
+
+export class Req {
+  user: UserDto;
+}

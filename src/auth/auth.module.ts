@@ -3,7 +3,6 @@ import { UserModule } from 'src/user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { GetToken } from '../utils/getToken';
 
 @Module({
   imports: [
@@ -17,12 +16,6 @@ import { GetToken } from '../utils/getToken';
     }),
   ],
   controllers: [AuthController],
-  providers: [
-    AuthService,
-    {
-      provide: 'getToken',
-      useClass: GetToken,
-    },
-  ],
+  providers: [AuthService],
 })
 export class AuthModule {}

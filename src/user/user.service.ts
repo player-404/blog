@@ -22,4 +22,9 @@ export class UserService {
     const user = await this.userModel.findById(id);
     return user;
   }
+
+  async getAllUsers() {
+    const allUsers = await this.userModel.find();
+    return allUsers;
+  }
 }

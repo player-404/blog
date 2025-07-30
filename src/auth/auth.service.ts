@@ -12,7 +12,6 @@ export class AuthService {
 
   async signIn(username: string, passowrd: string) {
     const user = await this.userService.findOneUser(username);
-    console.log('user', user);
     if (user && (await argon2.verify(user.password, passowrd))) {
       const payload = {
         sub: (user as { id: string }).id,

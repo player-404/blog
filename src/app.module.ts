@@ -5,9 +5,11 @@ import { UserModule } from './user/user.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { Connection } from 'mongoose';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { ErrorFilter } from './error/error.filter';
 import { AuthModule } from './auth/auth.module';
+import { GetToken } from './utils/getToken';
+import { AuthGuard } from './auth/auth.gurad';
 
 @Module({
   imports: [
@@ -28,8 +30,16 @@ import { AuthModule } from './auth/auth.module';
   providers: [
     AppService,
     {
+      provide: 'getToken',
+      useClass: GetToken,
+    },
+    {
       provide: APP_FILTER,
       useClass: ErrorFilter,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
     },
   ],
 })

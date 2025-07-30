@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { GetToken } from '../utils/getToken';
+import { Reflector } from '@nestjs/core';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -16,12 +17,16 @@ export class AuthGuard implements CanActivate {
     @Inject('getToken') private readonly getToken: GetToken,
     private readonly JwtService: JwtService,
     private readonly userService: UserService,
+    private readonly reflector: Reflector,
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req: Request = context.switchToHttp().getRequest();
     const token = this.getToken.extractTokenFromHeader(req);
-    console.log('token', token);
-
+    const isPublic = this.reflector.getAllAndOverride<boolean>('isPublic', [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (isPublic) return true;
     if (!token) {
       throw new UnauthorizedException('身份验证失败！');
     }
@@ -32,7 +37,6 @@ export class AuthGuard implements CanActivate {
           secret: process.env.JWT_SECRET,
         },
       );
-      console.log('payload', payload);
       const user = await this.userService.findUserById(payload.sub);
       if (!user) throw new UnauthorizedException('用户不存在,请重新登录');
       req['user'] = user;

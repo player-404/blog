@@ -3,6 +3,7 @@ import { UserModule } from 'src/user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { configEnum } from '../enum/config.enum';
 
 @Module({
   imports: [
@@ -10,8 +11,8 @@ import { AuthService } from './auth.service';
     JwtModule.registerAsync({
       global: true,
       useFactory: () => ({
-        secret: process.env.JWT_SECRET,
-        signOptions: { expiresIn: process.env.JWT_EXPIRES_IN },
+        secret: process.env[configEnum.JWT_SECRET],
+        signOptions: { expiresIn: process.env[configEnum.JWT_EXPIRES_IN] },
       }),
     }),
   ],

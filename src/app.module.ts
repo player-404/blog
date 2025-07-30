@@ -10,13 +10,17 @@ import { ErrorFilter } from './error/error.filter';
 import { AuthModule } from './auth/auth.module';
 import { GetToken } from './utils/getToken';
 import { AuthGuard } from './auth/auth.gurad';
+import { configEnum } from './enum/config.enum';
+import * as dotenv from 'dotenv';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: `.env.${process.env.NODE_ENV}`,
+      load: [() => dotenv.config()],
     }),
-    MongooseModule.forRoot(process.env.DB_URL as string, {
+    MongooseModule.forRoot(process.env[configEnum.DB_URL] as string, {
       onConnectionCreate(connect: Connection) {
         connect.on('connected', () => {
           console.log('数据库已经连接');

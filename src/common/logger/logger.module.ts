@@ -4,6 +4,8 @@ import * as winston from 'winston';
 import { configEnum } from '../../enum/config.enum';
 import { createLogger } from './createlogger';
 import { ConfigService } from '@nestjs/config';
+
+// 初始化 windton 配置 与 winston-daily-rotate-file 配置
 @Module({
   imports: [
     WinstonModule.forRootAsync({

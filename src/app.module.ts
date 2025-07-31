@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, Logger } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
@@ -8,22 +8,20 @@ import { Connection } from 'mongoose';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { ErrorFilter } from './error/error.filter';
 import { AuthModule } from './auth/auth.module';
-import { GetToken } from './utils/getToken';
 import { AuthGuard } from './auth/auth.gurad';
 import { configEnum } from './enum/config.enum';
-import * as dotenv from 'dotenv';
+import { GetToken } from './utils/getToken';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: `.env.${process.env.NODE_ENV}`,
-      load: [() => dotenv.config()],
+      envFilePath: [`.env.${process.env.NODE_ENV}`],
     }),
     MongooseModule.forRoot(process.env[configEnum.DB_URL] as string, {
       onConnectionCreate(connect: Connection) {
         connect.on('connected', () => {
-          console.log('数据库已经连接');
+          Logger.log('数据库连接成功');
         });
       },
     }),
@@ -32,6 +30,7 @@ import * as dotenv from 'dotenv';
   ],
   controllers: [AppController],
   providers: [
+    Logger,
     AppService,
     {
       provide: 'getToken',

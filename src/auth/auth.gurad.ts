@@ -37,7 +37,7 @@ export class AuthGuard implements CanActivate {
           secret: process.env.JWT_SECRET,
         },
       );
-      const user = await this.userService.findUserById(payload.sub);
+      const user = await this.userService.findUserById(payload.sub as string);
       if (!user) throw new UnauthorizedException('用户不存在,请重新登录');
       req['user'] = user;
     } catch (error) {

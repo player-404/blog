@@ -1,13 +1,22 @@
-import { Controller, Post, Body, Get, Logger } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  LoggerService,
+  Inject,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDto } from './user.dto';
 import { Public } from '../decorator/my.decoator';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Controller('user')
 export class UserController {
   constructor(
     private readonly userService: UserService,
-    private readonly logger: Logger,
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: LoggerService,
   ) {}
 
   @Post()

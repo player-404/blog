@@ -4,14 +4,19 @@ import {
   HttpException,
   Catch,
   HttpStatus,
-  Logger,
+  LoggerService,
+  Inject,
 } from '@nestjs/common';
 import { Response } from 'express';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 // 处理全局的错误
 @Catch()
 export class ErrorFilter implements ExceptionFilter {
-  constructor(private readonly logger: Logger) {}
+  constructor(
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: LoggerService,
+  ) {}
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();

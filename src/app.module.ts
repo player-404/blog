@@ -11,6 +11,7 @@ import { AuthModule } from './auth/auth.module';
 import { AuthGuard } from './auth/auth.gurad';
 import { configEnum } from './enum/config.enum';
 import { GetToken } from './utils/getToken';
+import { LoggerModule } from './common/logger/logger.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { GetToken } from './utils/getToken';
       isGlobal: true,
       envFilePath: [`.env.${process.env.NODE_ENV}`],
     }),
+    LoggerModule,
     MongooseModule.forRoot(process.env[configEnum.DB_URL] as string, {
       onConnectionCreate(connect: Connection) {
         connect.on('connected', () => {

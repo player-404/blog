@@ -17,9 +17,9 @@ import { LoggerModule } from './common/logger/logger.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: [`.env.${process.env.NODE_ENV}`],
+      envFilePath: [`.env.${process.env.NODE_ENV}`], // 根据环境读取相应的配置
     }),
-    LoggerModule,
+    LoggerModule, // 初始化 winston 配置
     MongooseModule.forRoot(process.env[configEnum.DB_URL] as string, {
       onConnectionCreate(connect: Connection) {
         connect.on('connected', () => {

@@ -3,4 +3,6 @@ export enum configEnum {
   JWT_SECRET = 'JWT_SECRET',
   JWT_EXPIRES_IN = 'JWT_EXPIRES_IN',
   LOG_ON = 'LOG_ON',
+  PREFLIX = 'PREFLIX',
+  CORS = 'CORS',
 }

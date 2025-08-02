@@ -19,7 +19,7 @@ import { ConfigService } from '@nestjs/config';
               format: winston.format.combine(
                 winston.format.timestamp(),
                 winston.format.ms(),
-                utilities.format.nestLike('logger'),
+                utilities.format.nestLike('winston log'),
               ),
             }),
             ...(logOn

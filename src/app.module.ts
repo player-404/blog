@@ -12,6 +12,7 @@ import { AuthGuard } from './auth/auth.gurad';
 import { configEnum } from './enum/config.enum';
 import { GetToken } from './utils/getToken';
 import { LoggerModule } from './common/logger/logger.module';
+import { RedisModules } from './common/reids/redis.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { LoggerModule } from './common/logger/logger.module';
       envFilePath: [`.env.${process.env.NODE_ENV}`], // 根据环境读取相应的配置
     }),
     LoggerModule, // 初始化 winston 配置
+    RedisModules, // redis
     MongooseModule.forRoot(process.env[configEnum.DB_URL] as string, {
       onConnectionCreate(connect: Connection) {
         connect.on('connected', () => {

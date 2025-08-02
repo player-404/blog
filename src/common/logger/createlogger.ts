@@ -1,5 +1,5 @@
-import * as winston from 'winston';
-import * as winstonDaily from 'winston-daily-rotate-file';
+import winston from 'winston';
+import winstonDaily from 'winston-daily-rotate-file';
 
 export function createLogger(filename: string, level: string) {
   return new winstonDaily({

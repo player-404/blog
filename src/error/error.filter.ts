@@ -38,7 +38,7 @@ export class ErrorFilter implements ExceptionFilter {
     //     message: exception.getResponse(),
     //   });
     // }
-    console.log('其他错误', exception);
+    console.log('错误', exception);
     const errResponse = exception.getResponse();
     response.status(exception.getStatus()).json({
       code: exception.getStatus(),

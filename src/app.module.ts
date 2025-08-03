@@ -3,7 +3,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ConfigModule } from '@nestjs/config';
 import { Connection } from 'mongoose';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { ErrorFilter } from './error/error.filter';
@@ -13,13 +12,11 @@ import { configEnum } from './enum/config.enum';
 import { GetToken } from './utils/getToken';
 import { LoggerModule } from './common/logger/logger.module';
 import { RedisModules } from './common/reids/redis.module';
+import { ConfigModules } from '@/common/config/config.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: [`.env.${process.env.NODE_ENV}`], // 根据环境读取相应的配置
-    }),
+    ConfigModules,
     LoggerModule, // 初始化 winston 配置
     RedisModules, // redis
     MongooseModule.forRoot(process.env[configEnum.DB_URL] as string, {

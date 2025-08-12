@@ -5,11 +5,14 @@ import {
   Get,
   LoggerService,
   Inject,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDto } from './user.dto';
 import { Public } from '../decorator/my.decoator';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('user')
 export class UserController {
@@ -30,5 +33,11 @@ export class UserController {
   async getAllUsers() {
     this.logger.log('getAllUsers');
     return await this.userService.getAllUsers();
+  }
+
+  @UseGuards(AuthGuard('local'))
+  @Post('login')
+  login(@Request() req: { user: UserDto }) {
+    return req.user;
   }
 }

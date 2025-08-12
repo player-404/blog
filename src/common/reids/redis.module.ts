@@ -11,6 +11,7 @@ import { ConfigService } from '@nestjs/config';
           type: 'single',
           url: config.get<string>(configEnum.REDIS_HOST),
           options: {
+            username: config.get<string>(configEnum.REDIS_NAME),
             password: config.get<string>(configEnum.REDIS_PASSWORD),
           },
         };

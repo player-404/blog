@@ -27,4 +27,21 @@ export class AuthService {
     }
     throw new UnauthorizedException('用户名或密码错误');
   }
+
+  async validateUser(
+    username: string,
+    password: string,
+  ): Promise<Record<string, any> | null> {
+    const user = await this.userService.findOneUser(username);
+    if (user && (await argon2.verify(user.password, password))) return user;
+    return null;
+  }
+
+  async login(user: { username: string; id: string }) {
+    const payload = { username: user.username, sub: user.id };
+    const token = await this.jwtService.signAsync(payload);
+    return {
+      token,
+    };
+  }
 }

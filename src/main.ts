@@ -25,6 +25,7 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
+      whitelist: true, // 传递的属性在dto中不存在时将会被过滤
       // 格式化class-validator错误
       exceptionFactory(error) {
         console.log('validate error', error);

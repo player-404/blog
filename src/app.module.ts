@@ -41,10 +41,6 @@ import { ConfigModules } from '@/common/config/config.module';
       provide: APP_FILTER,
       useClass: ErrorFilter,
     },
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
   ],
 })
 export class AppModule {}

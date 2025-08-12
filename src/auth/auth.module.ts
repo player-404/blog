@@ -4,10 +4,13 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { configEnum } from '../enum/config.enum';
+import { PassportModule } from '@nestjs/passport';
+import { LocalStrategy } from '@/strategy/local.strategy';
 
 @Module({
   imports: [
     UserModule,
+    PassportModule,
     JwtModule.registerAsync({
       global: true,
       useFactory: () => ({
@@ -17,6 +20,6 @@ import { configEnum } from '../enum/config.enum';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, LocalStrategy],
 })
 export class AuthModule {}

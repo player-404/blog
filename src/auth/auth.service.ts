@@ -28,6 +28,7 @@ export class AuthService {
     throw new UnauthorizedException('用户名或密码错误');
   }
 
+  // 密码验证
   async validateUser(
     username: string,
     password: string,
@@ -37,11 +38,10 @@ export class AuthService {
     return null;
   }
 
-  async login(user: { username: string; id: string }) {
+  // 生成token
+  async createJWT(user: { username: string; id: string }): Promise<string> {
     const payload = { username: user.username, sub: user.id };
     const token = await this.jwtService.signAsync(payload);
-    return {
-      token,
-    };
+    return token;
   }
 }

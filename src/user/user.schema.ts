@@ -23,6 +23,7 @@ export const userSchema = new mongoose.Schema<IUser>(
         delete ret.password;
         delete ret.confirmPassword;
         delete ret['_id'];
+        delete ret['__v'];
         return ret;
       },
     },
@@ -32,6 +33,7 @@ export const userSchema = new mongoose.Schema<IUser>(
         delete ret.password;
         delete ret.confirmPassword;
         delete ret['_id'];
+        delete ret['__v'];
         return ret;
       },
     },

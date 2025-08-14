@@ -12,11 +12,10 @@ import {
 import { Request } from 'express';
 import { UserService } from './user.service';
 import { UserDto } from './user.dto';
-import { Public } from '../decorator/my.decoator';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
-import { JwtAuthGuard } from '@/guards/jwt.auth.guard';
 import { LocalGuard } from '@/guards/local.auth.guard';
 import { AuthService } from '@/auth/auth.service';
+import { Public } from '@/decorator/my.decoator';
 
 @Controller('user')
 export class UserController {
@@ -33,7 +32,6 @@ export class UserController {
     return newUser;
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get()
   async getAllUsers(@Req() req: Request) {
     this.logger.log('getAllUsers');
@@ -41,6 +39,13 @@ export class UserController {
     return await this.userService.getAllUsers();
   }
 
+  @Public()
+  @Get('test')
+  test() {
+    return 'test';
+  }
+
+  @Public()
   @UseGuards(LocalGuard)
   @Post('login')
   @HttpCode(200)

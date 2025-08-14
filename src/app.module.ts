@@ -7,7 +7,7 @@ import { Connection } from 'mongoose';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { ErrorFilter } from './error/error.filter';
 import { AuthModule } from './auth/auth.module';
-import { AuthGuard } from './auth/auth.gurad';
+import { JwtAuthGuard } from './guards/jwt.auth.guard';
 import { configEnum } from './enum/config.enum';
 import { GetToken } from './utils/getToken';
 import { LoggerModule } from './common/logger/logger.module';
@@ -40,6 +40,10 @@ import { ConfigModules } from '@/common/config/config.module';
     {
       provide: APP_FILTER,
       useClass: ErrorFilter,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
     },
   ],
 })

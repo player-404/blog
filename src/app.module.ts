@@ -13,6 +13,8 @@ import { GetToken } from './utils/getToken';
 import { LoggerModule } from './common/logger/logger.module';
 import { RedisModules } from './common/reids/redis.module';
 import { ConfigModules } from '@/common/config/config.module';
+import { RoleModule } from './role/role.module';
+import { PermissionModule } from './permission/permission.module';
 
 @Module({
   imports: [
@@ -28,6 +30,8 @@ import { ConfigModules } from '@/common/config/config.module';
     }),
     UserModule,
     AuthModule,
+    RoleModule,
+    PermissionModule,
   ],
   controllers: [AppController],
   providers: [

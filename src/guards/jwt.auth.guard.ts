@@ -16,6 +16,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       context.getHandler(),
       context.getClass(),
     ]);
+    console.log('jwt auth guard', isPublic);
     if (isPublic) return true; // isPublic 为true代表公共接口，不进行token验证
     return super.canActivate(context);
   }

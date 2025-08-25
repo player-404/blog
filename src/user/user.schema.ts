@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import { IUser } from './user.dto';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import * as argon2 from 'argon2';
+import { ROLE_MODEL } from '@/role/entities/role.entity';
 
 export const userSchema = new mongoose.Schema<IUser>(
   {
@@ -15,8 +16,13 @@ export const userSchema = new mongoose.Schema<IUser>(
       required: [true, '密码不能为空'],
       minlength: [6, '密码长度不能小于6位'],
     },
+    roles: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: ROLE_MODEL,
+    },
   },
   {
+    timestamps: true,
     toJSON: {
       virtuals: true,
       transform: (doc, ret: IUser) => {

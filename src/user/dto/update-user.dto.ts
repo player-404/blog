@@ -1,6 +1,5 @@
 import { IsNotEmpty, MinLength } from 'class-validator';
 import { Match } from 'src/decorator/match.decorator';
-import { PartialType } from '@nestjs/mapped-types';
 
 export class UserDto {
   @IsNotEmpty({
@@ -15,13 +14,3 @@ export class UserDto {
   confirmPassword: string;
   roles: string[];
 }
-
-export interface IUser {
-  username?: string;
-  password?: string;
-  confirmPassword?: string;
-  _confirmPassword?: string;
-  roles?: any[];
-}
-
-export class updateUserDto extends PartialType(UserDto) {}

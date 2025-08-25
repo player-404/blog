@@ -1,21 +1,23 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { USER_MODEL } from './user.schema';
 import { Model } from 'mongoose';
-import { UserDto } from './user.dto';
+import { UserDto, updateUserDto } from './user.dto';
+import { RoleService } from 'src/role/role.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(USER_MODEL) private readonly userModel: Model<UserDto>,
+    private readonly roleService: RoleService,
   ) {}
   async createUser(user: UserDto) {
+    const haveUser = await this.userModel.findOne({ username: user.username });
+    if (haveUser) {
+      throw new ForbiddenException('用户已存在');
+    }
     const newUser = await this.userModel.create(user);
     return newUser;
-  }
-  async findOneUser(username: string) {
-    const user = await this.userModel.findOne({ username });
-    return user;
   }
 
   async findUserById(id: string) {
@@ -27,4 +29,18 @@ export class UserService {
     const allUsers = await this.userModel.find();
     return allUsers;
   }
+
+  async updateUser(id: string, user: updateUserDto) {
+    const updatedUser = await this.userModel.findByIdAndUpdate(id, user, {
+      new: true,
+    });
+    return updatedUser;
+  }
+
+  async findOneUser(id: string) {
+    const user = await this.userModel.findById(id);
+    return user;
+  }
+
+  async updateUserRoles() {}
 }

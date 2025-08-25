@@ -7,6 +7,7 @@ import {
   LoggerService,
   Inject,
 } from '@nestjs/common';
+
 import { Response } from 'express';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
@@ -40,9 +41,10 @@ export class ErrorFilter implements ExceptionFilter {
     // }
     console.log('错误', exception);
     const errResponse = exception.getResponse();
+
     response.status(exception.getStatus()).json({
       code: exception.getStatus(),
-      ...(errResponse as Record<string, any>),
+      msg: errResponse,
     });
   }
 }

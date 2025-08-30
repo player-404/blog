@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { UserService } from './user.service';
-import { UserDto } from './user.dto';
+import { updateUserDto, UserDto } from './user.dto';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { LocalGuard } from '@/guards/local.auth.guard';
 import { AuthService } from '@/auth/auth.service';
@@ -74,18 +74,19 @@ export class UserController {
   @Patch(':id')
   async updateUser(
     @Param('id') id: string,
-    @Body() updateUserDto: updateUserDto,
+    @Body() updateUserData: updateUserDto,
   ) {
-    const updateUser = await this.userService.updateUser(id, updateUserDto);
+    const updateUser = await this.userService.updateUser(id, updateUserData);
     return {
       mes: '修改成功！',
       data: updateUser,
     };
   }
 
-  @Get('id')
+  @Get(':id')
   async findOneUser(@Param('id') id: string) {
-    const user = await this.userService.findOneUser(id);
+    console.log('查询的Id', id);
+    const user = await this.userService.findUserById(id);
     return {
       msg: '查询成功',
       code: 200,

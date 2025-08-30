@@ -17,7 +17,7 @@ export class RoleService {
     if (haveRole) {
       throw new ForbiddenException('角色已存在');
     }
-    const newRole = await this.roleModel.create(createRoleDto);
+    const newRole = await this.roleModel.create(createRoleDto, { new: true });
     return {
       msg: '创建成功',
       code: 200,

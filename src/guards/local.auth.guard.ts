@@ -11,8 +11,8 @@ export class LocalGuard extends AuthGuard('local') {
     return super.canActivate(context);
   }
   handleRequest(err: any, user: any): any {
-    console.log('user', user, 'error', err);
     if (err || !user) {
+      console.log('local auth guard');
       throw new UnauthorizedException('身份验证失败'); // 自定义错误消息
     }
     return user;

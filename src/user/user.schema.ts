@@ -17,7 +17,7 @@ export const userSchema = new mongoose.Schema<IUser>(
       minlength: [6, '密码长度不能小于6位'],
     },
     roles: {
-      type: [mongoose.Schema.Types.ObjectId],
+      type: mongoose.Schema.Types.ObjectId,
       ref: ROLE_MODEL,
     },
   },

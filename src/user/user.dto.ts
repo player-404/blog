@@ -1,4 +1,4 @@
-import { IsNotEmpty, MinLength } from 'class-validator';
+import { IsArray, IsNotEmpty, MinLength } from 'class-validator';
 import { Match } from 'src/decorator/match.decorator';
 import { PartialType } from '@nestjs/mapped-types';
 
@@ -13,7 +13,8 @@ export class UserDto {
   password: string;
   @Match('password')
   confirmPassword: string;
-  roles: string[];
+  @IsArray()
+  roles: any[];
 }
 
 export interface IUser {

@@ -3,14 +3,13 @@ import { InjectModel } from '@nestjs/mongoose';
 import { USER_MODEL } from './user.schema';
 import { Model } from 'mongoose';
 import { UserDto, updateUserDto } from './user.dto';
-import { RoleService } from 'src/role/role.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(USER_MODEL) private readonly userModel: Model<UserDto>,
-    private readonly roleService: RoleService,
   ) {}
+
   async createUser(user: UserDto) {
     const haveUser = await this.userModel.findOne({ username: user.username });
     if (haveUser) {
@@ -21,7 +20,8 @@ export class UserService {
   }
 
   async findUserById(id: string) {
-    const user = await this.userModel.findById(id);
+    const user = await this.userModel.findById(id).populate('roles');
+
     return user;
   }
 
@@ -37,8 +37,8 @@ export class UserService {
     return updatedUser;
   }
 
-  async findOneUser(id: string) {
-    const user = await this.userModel.findById(id);
+  async findOneUser(username: string) {
+    const user = await this.userModel.findOne({ username });
     return user;
   }
 

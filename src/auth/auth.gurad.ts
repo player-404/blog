@@ -28,6 +28,7 @@ export class AuthGuard implements CanActivate {
     ]);
     if (isPublic) return true;
     if (!token) {
+      console.log('没有token');
       throw new UnauthorizedException('身份验证失败！');
     }
     try {

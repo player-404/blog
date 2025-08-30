@@ -22,4 +22,4 @@ export const RoleSchema = new mongoose.Schema(
   },
 );
 
-export const ROLE_MODEL = 'Role';
+export const ROLE_MODEL = 'Roles';

@@ -4,6 +4,7 @@ import { RoleController } from './role.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ROLE_MODEL } from './entities/role.entity';
 import { RoleSchema } from './entities/role.entity';
+import { checkDefault } from '@/decorator/defaut-role-check.constraint';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { RoleSchema } from './entities/role.entity';
     ]),
   ],
   controllers: [RoleController],
-  providers: [RoleService],
+  providers: [RoleService, checkDefault],
   exports: [RoleService],
 })
 export class RoleModule {}

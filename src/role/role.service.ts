@@ -17,11 +17,12 @@ export class RoleService {
     if (haveRole) {
       throw new ForbiddenException('角色已存在');
     }
-    const newRole = await this.roleModel.create(createRoleDto, { new: true });
+    console.log('创建的角色数据', createRoleDto);
+    const roles = await this.roleModel.create(createRoleDto);
     return {
       msg: '创建成功',
       code: 200,
-      data: newRole,
+      data: roles,
     };
   }
 
@@ -35,7 +36,7 @@ export class RoleService {
   }
 
   async findOne(id: string) {
-    const role = await this.roleModel.findById(id);
+    const role = await this.roleModel.findById(id).populate('');
     return {
       msg: '查询成功',
       code: 200,
@@ -43,11 +44,23 @@ export class RoleService {
     };
   }
 
+  async findDefaultRole() {
+    const role = await this.roleModel.findOne({ isDefault: true });
+    return {
+      msg: '查询成功',
+      code: 200,
+      data: role || null,
+    };
+  }
+
   async update(id: string, updateRoleDto: UpdateRoleDto) {
-    const updatedRole = await this.roleModel.findByIdAndUpdate(
-      id,
-      updateRoleDto,
-    );
+    const updatedRole = await this.roleModel
+      .findByIdAndUpdate(id, updateRoleDto, {
+        new: true,
+      })
+      .populate({
+        path: 'permission',
+      });
     return {
       msg: '更新成功',
       code: 200,

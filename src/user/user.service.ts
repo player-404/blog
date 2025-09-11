@@ -3,11 +3,13 @@ import { InjectModel } from '@nestjs/mongoose';
 import { USER_MODEL } from './user.schema';
 import { Model } from 'mongoose';
 import { UserDto, updateUserDto } from './user.dto';
+import { RoleService } from '@/role/role.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(USER_MODEL) private readonly userModel: Model<UserDto>,
+    private readonly roleService: RoleService,
   ) {}
 
   async createUser(user: UserDto) {
@@ -15,18 +17,28 @@ export class UserService {
     if (haveUser) {
       throw new ForbiddenException('用户已存在');
     }
+    if (!user.roles) {
+      const defautRole = await this.roleService.findDefaultRole();
+      const defaultRoleId = (defautRole.data && defautRole.data._id) || '';
+      user.roles = [defaultRoleId];
+    }
     const newUser = await this.userModel.create(user);
     return newUser;
   }
 
   async findUserById(id: string) {
-    const user = await this.userModel.findById(id).populate('roles');
+    const user = await this.userModel.findById(id).populate({
+      path: 'roles',
+      populate: {
+        path: 'permission',
+      },
+    });
 
     return user;
   }
 
   async getAllUsers() {
-    const allUsers = await this.userModel.find();
+    const allUsers = await this.userModel.find().populate('roles');
     return allUsers;
   }
 
@@ -42,5 +54,15 @@ export class UserService {
     return user;
   }
 
-  async updateUserRoles() {}
+  async updateUserRoles(id: string, roles: string[]) {
+    return await this.userModel.findByIdAndUpdate(
+      id,
+      {
+        roles: roles,
+      },
+      {
+        new: true,
+      },
+    );
+  }
 }

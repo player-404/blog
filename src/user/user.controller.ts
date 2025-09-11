@@ -19,8 +19,12 @@ import { LocalGuard } from '@/guards/local.auth.guard';
 import { AuthService } from '@/auth/auth.service';
 import { Public } from '@/decorator/my.decoator';
 import { ValidateRolesIdGuard } from './guards/validate-rolesid.guard';
+import { UpdateRoleDto } from './dto/update-role.dto';
+import { update, permission } from '@/decorator/role.permission';
+import { RolePermissionGuard } from '@/guards/role-permission.guard';
 
 @Controller('user')
+@permission('admin')
 export class UserController {
   constructor(
     private readonly userService: UserService,
@@ -91,6 +95,25 @@ export class UserController {
       msg: '查询成功',
       code: 200,
       data: user,
+    };
+  }
+
+  // 权限更新
+  @Patch('role/:id')
+  @UseGuards(RolePermissionGuard)
+  @update()
+  async updateUserRole(
+    @Param('id') id: string,
+    @Body() updateUserData: UpdateRoleDto,
+  ) {
+    const data = await this.userService.updateUserRoles(
+      id,
+      updateUserData.roles,
+    );
+    return {
+      msg: '权限更新成功',
+      code: 200,
+      data,
     };
   }
 }

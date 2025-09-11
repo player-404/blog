@@ -9,6 +9,7 @@ import {
   VersioningType,
 } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { useContainer } from 'class-validator';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   // 获取configservice
@@ -21,6 +22,10 @@ async function bootstrap() {
   const version: string = configService.get<string>(configEnum.VERSION, '');
   // 注册全局logger
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
+
+  //app.select(AppModule): 这指定了 NestJS 的根模块 (AppModule) 作为 class-validator 要使用的容器。app.select(AppModule) 用于获取特定模块的容器。
+  //{ fallbackOnErrors: true }: 这个选项非常重要。当 NestJS 的容器无法解析某个类（例如 class-validator 内部自己的某些类）时，会回退到 class-validator 自己的默认容器去解析，而不是直接抛出错误
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
   // 注册全局pipes
   app.useGlobalPipes(
     new ValidationPipe({

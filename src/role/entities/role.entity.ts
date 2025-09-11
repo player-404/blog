@@ -5,16 +5,21 @@ export const RoleSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
-      unique: true,
-      index: true,
+      required: [true, '请输入角色名称'],
+      unique: [true, '角色已经存在'],
     },
     description: {
       type: String,
     },
-    permission: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: PERMISSION_MODEL,
+    permission: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: PERMISSION_MODEL,
+      },
+    ],
+    isDefault: {
+      type: Boolean,
+      default: false,
     },
   },
   {

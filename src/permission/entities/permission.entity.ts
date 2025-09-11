@@ -10,7 +10,7 @@ export const PermissionSchema = new mongoose.Schema(
       type: String,
     },
     action: {
-      type: Array,
+      type: String,
       required: true,
     },
   },

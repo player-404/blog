@@ -30,6 +30,9 @@ export class PermissionService {
     const updatePermission = await this.permissionModel.findByIdAndUpdate(
       id,
       updatePermissionDto,
+      {
+        new: true,
+      },
     );
     return updatePermission;
   }

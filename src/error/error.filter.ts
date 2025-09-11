@@ -24,6 +24,8 @@ export class ErrorFilter implements ExceptionFilter {
 
     this.logger.error(exception.message, exception.stack);
     // mongoose错误
+    console.log('错误', exception);
+
     if (exception.name === 'MongooseError') {
       if ((exception as { cause: { code: number } }).cause.code === 11000) {
         response.status(HttpStatus.CONFLICT).json({

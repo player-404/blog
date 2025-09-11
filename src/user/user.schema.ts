@@ -16,10 +16,12 @@ export const userSchema = new mongoose.Schema<IUser>(
       required: [true, '密码不能为空'],
       minlength: [6, '密码长度不能小于6位'],
     },
-    roles: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: ROLE_MODEL,
-    },
+    roles: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: ROLE_MODEL,
+      },
+    ],
   },
   {
     timestamps: true,

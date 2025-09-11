@@ -1,4 +1,4 @@
-import { IsArray, IsNotEmpty, MinLength } from 'class-validator';
+import { IsArray, IsNotEmpty, IsOptional, MinLength } from 'class-validator';
 import { Match } from 'src/decorator/match.decorator';
 import { PartialType } from '@nestjs/mapped-types';
 
@@ -14,6 +14,7 @@ export class UserDto {
   @Match('password')
   confirmPassword: string;
   @IsArray()
+  @IsOptional()
   roles: any[];
 }
 

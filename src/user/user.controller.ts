@@ -39,7 +39,11 @@ export class UserController {
   async createUser(@Body() user: UserDto) {
     console.log('user', user);
     const newUser = await this.userService.createUser(user);
-    return newUser;
+    return {
+      msg: '创建成功',
+      code: 200,
+      data: newUser,
+    };
   }
 
   @Get()

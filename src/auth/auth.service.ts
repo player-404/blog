@@ -44,4 +44,16 @@ export class AuthService {
     const token = await this.jwtService.signAsync(payload);
     return token;
   }
+
+  // 生成refresh token
+  async createRefreshToken(user: {
+    username: string;
+    id: string;
+  }): Promise<string> {
+    const payload = { username: user.username, sub: user.id };
+    const token = await this.jwtService.signAsync(payload, {
+      expiresIn: '0.5h',
+    });
+    return token;
+  }
 }

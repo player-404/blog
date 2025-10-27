@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import {
   Controller,
   Post,
@@ -10,6 +11,7 @@ import {
   Req,
   Patch,
   Param,
+  Res,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { UserService } from './user.service';
@@ -22,6 +24,7 @@ import { ValidateRolesIdGuard } from './guards/validate-rolesid.guard';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { update, permission } from '@/decorator/role.permission';
 import { RolePermissionGuard } from '@/guards/role-permission.guard';
+import { Response } from 'express';
 
 @Controller('user')
 @permission('admin')
@@ -31,6 +34,7 @@ export class UserController {
     @Inject(WINSTON_MODULE_NEST_PROVIDER)
     private readonly logger: LoggerService,
     private readonly authService: AuthService,
+    private readonly configService: ConfigService,
   ) {}
 
   @Post()
@@ -69,11 +73,30 @@ export class UserController {
   @UseGuards(LocalGuard)
   @Post('login')
   @HttpCode(200)
-  async login(@Req() req: { user: UserDto }) {
+  async login(
+    @Req() req: { user: UserDto },
+    @Res({ passthrough: true }) response: Response,
+  ) {
     const token = await this.authService.createJWT(req.user as any);
+    const refreshToken = await this.authService.createRefreshToken(
+      req.user as any,
+    );
+    // assess token
+    response.cookie('AS_TOKEN', token, {
+      maxAge: 1000 * 60 * 60 * 24 * 1,
+      sameSite: 'lax', // CSRF 保护
+      secure: false,
+    });
+    // refresh token
+    response.cookie('REFRESH_TOKEN', refreshToken, {
+      maxAge: 1000 * 30 * 60,
+      sameSite: 'lax', // CSRF 保护
+      secure: false,
+    });
     return {
       data: {
         token,
+        refreshToken,
         user: req.user,
       },
     };

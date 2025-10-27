@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { useContainer } from 'class-validator';
+import cookieParser from 'cookie-parser';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   // 获取configservice
@@ -20,6 +21,8 @@ async function bootstrap() {
   const cors: boolean = configService.get<boolean>(configEnum.CORS, false);
   // 获取版本号
   const version: string = configService.get<string>(configEnum.VERSION, '');
+  // cookie
+  app.use(cookieParser());
   // 注册全局logger
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
 
@@ -52,7 +55,10 @@ async function bootstrap() {
   });
   // 开启跨域
   if (cors) {
-    app.enableCors();
+    app.enableCors({
+      credentials: true,
+      origin: 'http://localhost:5173',
+    });
   }
   await app.listen(process.env.PORT ?? 3000);
 }
